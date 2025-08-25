@@ -7,134 +7,98 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-    /* Responsive root font sizing */
-    html { font-size: clamp(16px, 1.2vw + 12px, 18px); }
-
     body {
-        font-family: sans-serif;
-        /* text-align: center; */
+        font-family: monospace, sans-serif;
+        text-align: center;
         background-color: #1e1e1e;
         color: #e0e0e0;
         margin: 0;
         padding: 20px;
     }
-
-    textarea, input[type=password], input[type=text] { 
-        width: 100%; 
-        margin-bottom: 0.5rem;
-        background-color: #2b2b2b;     /* darker background for inputs */
-        color: #e6e6e6;                /* light gray text */
-        border: 1px solid #444;        /* subtle border */
-        border-radius: 0.375rem;
-        padding: 0.6rem 0.7rem;        /* comfortable touch target */
-        line-height: 1.3;
-        font-size: 1rem;               /* scales with root */
-    }
-
-    textarea { height: 6rem; }         /* default taller textareas */
-
-    button { 
-        margin-top: 0.2rem; 
-        margin-bottom: 0.6rem; 
-        background-color: #3a3a3a;     /* dark button background */
-        color: #fff;                   /* white button text */
-        border: 1px solid #555;        /* subtle border */
-        border-radius: 0.375rem;
-        padding: 0.55rem 0.9rem;
-        font-size: 1rem;
-        line-height: 1.2;
-        min-height: 2.75rem;           /* ~44px touch target */
-        cursor: pointer;
-        transition: background-color 0.15s ease;
-    }
-    button:hover { background-color: #4a4a4a; }
-
-    h2, h3, h4, h5 { margin: 0.4rem 0 0.5rem; }
-    label { display: block; margin: 0.3rem 0; }
-
-    /* Password wrapper styles */
-    .password-wrap { position: relative; }
-    .password-wrap input[type=password],
-    .password-wrap input[type=text] {
-        padding-right: 2.2rem;         /* leave room for eye button */
+	textarea, input[type="text"], input[type="password"] {
+        width: 100%;
         box-sizing: border-box;
+        padding: 10px;
+        font-size: 16px;
+        /* height: 100px; */
+		height: auto;
+        overflow-y: auto;
+        resize: none;
+        background-color: #2b2b2b;
+        color: #ffffff;
+        border: 1px solid #444;
+        border-radius: 4px;
     }
-    
-    .count-badge {
-        margin-left: 0.5rem;
-        padding: 0 0.6rem;
-        border-radius: 1rem;
-        background: #555;              /* darker badge */
-        color: #fff;                   /* white text for counter */
-        font-size: 0.9rem;
-        vertical-align: middle;
+	textarea#shaOutput,
+    textarea#decryptedText {
+        font-size: 14px;
     }
-
-    .password-toggle {
-        position: absolute;
-        right: 0.5rem;
-        top: 50%;
-        transform: translateY(-50%);
-        border: 0;
-        background: transparent;
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    button {
+        padding: 10px 16px;
+		font-family: monospace, sans-serif;
+        font-size: 16px;
         cursor: pointer;
-        width: 2rem;                   /* larger tap area */
-        height: 2rem;                  /* larger tap area */
-        display: inline-grid;
-        place-items: center;
+        background-color: #3a3a3a;
+        color: #fff;
+        border: 1px solid #555;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+		margin-top: 10px;
     }
-    .password-toggle:focus {
-        outline: 2px solid #4a90e2;
-        outline-offset: 2px;
+    button:hover {
+        background-color: #555;
     }
-    .password-toggle svg {
-        width: 1.2rem;                 /* slightly larger icon */
-        height: 1.2rem;
-        stroke: #ccc;                  /* eye icon light gray */
-        fill: none;
+    .count-badge {
+        font-weight: bold;
+        color: #ffff00;
     }
-    .password-toggle:hover svg { stroke: #fff; }
-
-    /* Small-screen tweaks */
-    @media (max-width: 600px) {
-        textarea { height: 8rem; }
-        h2 { font-size: 1.4rem; }
+	h2, h3, h4 {
+		font-weight: normal;
+		margin-top: 6px;
+        margin-bottom: 6px;
+    }
+	/* Reduce top margin for first heading */
+    h2:first-of-type {
+        margin-top: 2px;
     }
 </style>
+
 </head>
 <body>
 <h2>SHA-256 + AES-256-GCM</h2>
 
-<label for="textInput">Enter text:</label>
-<textarea id="textInput" placeholder="Type text here..."></textarea>
-<br>
-<button onclick="copyToClipboard('textInput')">Copy Plaintext</button><span class="count-badge">0</span>
+<label for="textInput"><h4>Enter text:</h4></label>
+<textarea id="textInput" placeholder="Type text here..."></textarea><br>
+<button onclick="copyToClipboard('textInput')">Copy Plaintext: <span class="count-badge">0</span></button>
 
 <h4>SHA-256 of Input:</h4>
-<textarea id="shaOutput" readonly placeholder="SHA-256 will appear here..."></textarea>
-<button onclick="copyToClipboard('shaOutput')">Copy SHA-256</button><span class="count-badge">0</span>
+<textarea id="shaOutput" readonly placeholder="SHA-256 will appear here..."></textarea><br>
+<button onclick="copyToClipboard('shaOutput')">Copy SHA-256: <span class="count-badge">0</span></button>
+<br>
 
-<label for="password">Enter password:</label>
+<label for="password"><h4>Enter password:</h4></label>
 <div class="password-wrap">
-    <input type="password" id="password" placeholder="Password">
-    <button type="button" id="togglePwd" class="password-toggle" aria-label="Show password" title="Show/Hide">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" stroke-width="2"/>
-            <circle cx="12" cy="12" r="3" stroke-width="2"/>
-        </svg>
-    </button>
+    <input type="password" id="password" placeholder="Password"><br>
+	<button type="button" id="togglePwd" class="password-toggle" aria-label="Show password" title="Show/Hide">
+		Show Password
+	</button>
 </div>
 
-<h4>Encrypted Output</h4>
-<h4>PBKDF2-HMAC-SHA256 100k</h4>
-<h4>AES-256-GCM Base64 output:</h4>
-<h5>[16B salt, 12B IV, ciphertext, 12B tag]</h5>
-<textarea id="output" placeholder="Encrypted text appears here..."></textarea>
-<button onclick="copyToClipboard('output')">Copy Encrypted Text</button><span class="count-badge">0</span>
+<h4>Encrypted Output:</h4>
+<label for="parameters"><h4>PBKDF2-HMAC-SHA256 100k, AES-256-GCM<br>
+[16B salt, 12B IV, ciphertext, 12B tag] Base64 output:</h4></label>
+<textarea id="output" placeholder="Encrypted text appears here..."></textarea><br>
+<button onclick="copyToClipboard('output')">Copy Encrypted Text: <span class="count-badge">0</span></button>
 
 <h4>Decrypted Text:</h4>
-<textarea id="decryptedText" readonly placeholder="Decrypted text appears here..."></textarea>
-<button onclick="copyToClipboard('decryptedText')">Copy Decrypted Text</button><span class="count-badge">0</span>
+<textarea id="decryptedText" readonly placeholder="Decrypted text appears here..."></textarea><br>
+<button onclick="copyToClipboard('decryptedText')">Copy Decrypted Text: <span class="count-badge">0</span></button>
 
 <script>
 const textInput = document.getElementById("textInput");
@@ -167,9 +131,9 @@ async function copyToClipboard(elementId) {
 }
 
 // Attach counters to any button that is immediately followed by a .count-badge
-document.querySelectorAll('button + .count-badge').forEach(span => {
-  const btn = span.previousElementSibling;
-  if (!btn || btn.id === 'togglePwd') return; // exclude password eye button
+document.querySelectorAll('button .count-badge').forEach(span => {
+  const btn = span.closest('button');
+  if (!btn || btn.id === 'togglePwd') return;
   btn.addEventListener('click', () => {
     span.textContent = String((parseInt(span.textContent, 10) || 0) + 1);
   });
@@ -190,6 +154,7 @@ function togglePassword() {
     const btn = document.getElementById("togglePwd");
     const showing = pwd.type === "text";
     pwd.type = showing ? "password" : "text";
+    btn.textContent = showing ? "Show Password" : "Hide Password";  // <-- added
     btn.setAttribute("aria-label", showing ? "Show password" : "Hide password");
 }
 document.getElementById('togglePwd').addEventListener('click', togglePassword);
