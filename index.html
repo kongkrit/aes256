@@ -260,6 +260,12 @@ passwordInput.addEventListener("input", async () => {
     await updateFromInput();
 });
 outputBox.addEventListener("input", updateFromEncrypted);
+
+// Clear all boxes on reload
+window.addEventListener("load", () => {
+    document.querySelectorAll("input[type='text'], input[type='password'], textarea")
+        .forEach(el => el.value = "");
+});
 </script>
 </body>
 </html>
