@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SHA-256 + AES-256-GCM</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">      
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<h2>SHA-256 + AES-256-GCM</h2>
+
+<button id="theme-toggle">Light / Dark</button>
+<label for="textInput"><h4>Enter text:</h4></label>
+<textarea id="textInput" placeholder="Type text here..."></textarea><br>
+<button onclick="copyToClipboard('textInput')">Copy Plaintext: <span class="count-badge">0</span></button>
+
+<h4>SHA-256 of Input:</h4>
+<textarea id="shaOutput" readonly placeholder="SHA-256 will appear here..."></textarea><br>
+<button onclick="copyToClipboard('shaOutput')">Copy SHA-256: <span class="count-badge">0</span></button>
+<br>
+
+<label for="password"><h4>Enter password:</h4></label>
+<div class="password-wrap">
+    <input type="password" id="password" placeholder="Password"><br>
+	<button type="button" id="togglePwd" class="password-toggle" aria-label="Show password" title="Show/Hide">
+		Show Password
+	</button>
+</div>
+
+<h4>Encrypted Output:</h4>
+<label for="parameters"><h4>PBKDF2-HMAC-SHA256 100k, AES-256-GCM<br>
+[16B salt, 12B IV, ciphertext, 12B tag] Base64 output:</h4></label>
+<textarea id="output" placeholder="Encrypted text appears here..."></textarea><br>
+<button onclick="copyToClipboard('output')">Copy Encrypted Text: <span class="count-badge">0</span></button>
+
+<h4>Decrypted Text:</h4>
+<textarea id="decryptedText" readonly placeholder="Decrypted text appears here..."></textarea><br>
+<button onclick="copyToClipboard('decryptedText')">Copy Decrypted Text: <span class="count-badge">0</span></button>
+
+<script src="script.js"></script>
+
+</body>
+</html>

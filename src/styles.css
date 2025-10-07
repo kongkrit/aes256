@@ -1,0 +1,89 @@
+:root {
+  --bgA:  #1e1e1e;
+  --bgB:  #2b2b2b;
+  --bgC:  #3a3a3a;
+  --bgD:  #444444;
+  --bgE:  #555555;
+  --fgE:  #bebebe;
+  --fgD:  #cecece;
+  --fgC:  #e0e0e0;
+  --fgB:  #eeeeee;
+  --fgA:  #ffffff;
+  
+  --accent: #ffff00;
+}
+body[data-theme="light"] {
+  --fgA:  #1e1e1e;
+  --fgB:  #2b2b2b;
+  --fgC:  #3a3a3a;
+  --fgD:  #444444;
+  --fgE:  #555555;
+  --bgE:  #bebebe;
+  --bgD:  #cecece;
+  --bgC:  #e0e0e0;
+  --bgB:  #eeeeee;
+  --bgA:  #ffffff;
+  
+  --accent: #0000ff;
+}
+
+body {
+  font-family: monospace, sans-serif;
+  text-align: center;
+  background-color: var(--bgA);
+  color: var(--fgC);
+  margin: 0;
+  padding: 14px;
+}
+textarea, input[type="text"], input[type="password"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+  /* height: 100px; */
+  height: auto;
+  overflow-y: auto;
+  resize: none;
+  background-color: var(--bgB);
+  color: var(--fgA);
+  border: 1px solid var(--bgD);
+  border-radius: 4px;
+}
+textarea#shaOutput,
+textarea#decryptedText {
+  font-size: 14px;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+button {
+  padding: 8px 16px;
+  font-family: monospace, sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: var(--bgC);
+  color: var(--fgA);
+  border: 1px solid var(--bgE);
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+	margin-top: 10px;
+}
+button:hover {
+  background-color: var(--bgE);
+}
+.count-badge {
+  font-weight: bold;
+  color: var(--accent);
+}
+h2, h3, h4 {
+  font-weight: normal;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+/* Reduce top margin for first heading */
+h2:first-of-type {
+  margin-top: 2px;
+}

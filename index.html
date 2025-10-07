@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SHA-256 + AES-256-GCM</title>
+<!-- inlined favicon SVG (raw, not encoded) -->
+<script type="image/svg+xml" id="inlined-favicon-svg"><svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <rect x="0" y="0" width="256" height="256" rx="16" ry="16" fill="#2d6a4f" />
+  <g transform="translate(28.59,1.10) scale(2.59860)">
+    <defs />
+    <g fill="#d8f3dc">
+      <g id="line1" transform="translate(0, 0)">
+        <path d="M14.31 13.99L4.59 46.39L0 46.39L11.45 10.84L14.33 10.84L14.31 13.99M22.17 46.39L12.45 13.99L12.40 10.84L15.31 10.84L26.76 46.39L22.17 46.39M22.17 33.23L22.17 37.08L5.03 37.08L5.03 33.23L22.17 33.23ZM50.73 42.55L50.73 46.39L35.30 46.39L35.30 42.55L50.73 42.55M36.11 10.84L36.11 46.39L31.62 46.39L31.62 10.84L36.11 10.84M48.66 26.12L48.66 29.96L35.30 29.96L35.30 26.12L48.66 26.12M50.49 10.84L50.49 14.70L35.30 14.70L35.30 10.84L50.49 10.84ZM72.02 37.40Q72.02 36.16 71.73 35.19Q71.44 34.23 70.70 33.45Q69.97 32.67 68.65 31.96Q67.33 31.25 65.31 30.52Q63.11 29.74 61.33 28.77Q59.55 27.81 58.29 26.56Q57.03 25.32 56.35 23.71Q55.66 22.09 55.66 20.02Q55.66 17.94 56.38 16.19Q57.10 14.43 58.44 13.12Q59.77 11.82 61.65 11.08Q63.53 10.35 65.84 10.35Q69.31 10.35 71.69 11.88Q74.07 13.40 75.29 15.86Q76.51 18.31 76.51 21.09L72.02 21.09Q72.02 19.09 71.37 17.54Q70.73 15.99 69.37 15.10Q68.02 14.21 65.84 14.21Q63.89 14.21 62.63 14.97Q61.38 15.72 60.78 17.02Q60.18 18.31 60.18 19.97Q60.18 21.09 60.57 22.01Q60.96 22.92 61.78 23.71Q62.60 24.49 63.83 25.15Q65.06 25.81 66.75 26.42Q69.36 27.27 71.22 28.32Q73.07 29.37 74.24 30.68Q75.42 31.98 75.96 33.63Q76.51 35.28 76.51 37.35Q76.51 39.53 75.79 41.28Q75.07 43.04 73.71 44.29Q72.34 45.53 70.41 46.20Q68.48 46.88 66.06 46.88Q63.96 46.88 61.95 46.19Q59.94 45.51 58.30 44.14Q56.67 42.77 55.69 40.76Q54.71 38.75 54.71 36.08L59.20 36.08Q59.20 37.92 59.74 39.22Q60.28 40.53 61.23 41.38Q62.18 42.24 63.42 42.64Q64.65 43.04 66.06 43.04Q68.02 43.04 69.35 42.36Q70.68 41.67 71.35 40.41Q72.02 39.14 72.02 37.40Z" />
+      </g>
+      <g id="line2" transform="translate(0, 40.4345703125) scale(1.1041997402222543,1)">
+        <path d="M20.41 42.68L20.41 46.39L0.54 46.39L0.54 43.14L10.33 30.18Q12.13 27.78 13.09 26.11Q14.04 24.44 14.40 23.11Q14.77 21.78 14.77 20.39Q14.77 18.63 14.21 17.20Q13.65 15.77 12.57 14.92Q11.50 14.06 9.99 14.06Q8.01 14.06 6.75 14.98Q5.49 15.89 4.91 17.53Q4.32 19.17 4.32 21.29L0 21.29Q0 18.29 1.11 15.80Q2.22 13.31 4.44 11.83Q6.67 10.35 9.99 10.35Q12.84 10.35 14.88 11.54Q16.92 12.72 18.01 14.86Q19.09 16.99 19.09 19.85Q19.09 21.41 18.66 23.01Q18.24 24.61 17.49 26.20Q16.75 27.78 15.75 29.32Q14.75 30.86 13.60 32.35L5.71 42.68L20.41 42.68ZM30.44 29.47L27.00 28.54L28.52 10.84L43.99 10.84L43.99 15.01L32.15 15.01L31.32 24.68Q32.15 24.12 33.33 23.63Q34.50 23.14 36.06 23.14Q38.16 23.14 39.81 23.99Q41.46 24.83 42.60 26.39Q43.75 27.95 44.36 30.15Q44.97 32.35 44.97 35.06Q44.97 37.62 44.37 39.77Q43.77 41.92 42.57 43.52Q41.36 45.12 39.54 46.00Q37.72 46.88 35.30 46.88Q33.50 46.88 31.88 46.28Q30.27 45.68 28.99 44.45Q27.71 43.21 26.90 41.37Q26.10 39.53 25.90 37.04L29.98 37.04Q30.22 39.04 30.92 40.41Q31.62 41.77 32.73 42.47Q33.84 43.16 35.30 43.16Q36.55 43.16 37.55 42.60Q38.55 42.04 39.23 40.99Q39.92 39.94 40.28 38.45Q40.65 36.96 40.65 35.11Q40.65 33.42 40.28 31.98Q39.92 30.54 39.18 29.47Q38.45 28.39 37.41 27.80Q36.38 27.20 35.01 27.20Q33.18 27.20 32.31 27.81Q31.45 28.42 30.44 29.47ZM64.62 10.79L64.94 10.79L64.94 14.62L64.62 14.62Q61.55 14.62 59.58 15.78Q57.62 16.94 56.53 18.88Q55.44 20.83 55.03 23.24Q54.61 25.66 54.61 28.15L54.61 33.37Q54.61 35.74 55.07 37.56Q55.52 39.38 56.26 40.63Q57.01 41.87 57.95 42.50Q58.89 43.14 59.86 43.14Q61.11 43.14 62.07 42.54Q63.04 41.94 63.68 40.86Q64.33 39.77 64.67 38.28Q65.01 36.79 65.01 35.01Q65.01 33.42 64.71 31.95Q64.40 30.47 63.79 29.31Q63.18 28.15 62.24 27.48Q61.30 26.81 60.01 26.81Q58.54 26.81 57.29 27.72Q56.03 28.64 55.22 30.11Q54.42 31.59 54.27 33.33L52.05 33.30Q52.39 30.57 53.20 28.63Q54.00 26.68 55.16 25.45Q56.32 24.22 57.74 23.65Q59.16 23.07 60.72 23.07Q62.99 23.07 64.61 24.07Q66.24 25.07 67.27 26.75Q68.31 28.42 68.80 30.51Q69.29 32.59 69.29 34.79Q69.29 37.30 68.69 39.50Q68.09 41.70 66.92 43.36Q65.75 45.02 63.98 45.95Q62.21 46.88 59.86 46.88Q57.37 46.88 55.57 45.69Q53.76 44.51 52.58 42.53Q51.39 40.55 50.83 38.13Q50.27 35.72 50.27 33.23L50.27 31.10Q50.27 27.34 50.81 23.73Q51.34 20.12 52.84 17.19Q54.35 14.26 57.19 12.52Q60.03 10.79 64.62 10.79Z" />
+      </g>
+    </g>
+  </g>
+</svg></script>
+<script>(function(){try{var raw=document.getElementById('inlined-favicon-svg');if(!raw)return;var blob=new Blob([raw.textContent],{type:'image/svg+xml'});var url=URL.createObjectURL(blob);var link=document.querySelector('link[rel="icon"]');if(!link){link=document.createElement('link');link.setAttribute('rel','icon');document.head.appendChild(link);}link.setAttribute('href',url);}catch(e){}})();</script>      
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>:root {
+  --bgA:  #1e1e1e;
+  --bgB:  #2b2b2b;
+  --bgC:  #3a3a3a;
+  --bgD:  #444444;
+  --bgE:  #555555;
+  --fgE:  #bebebe;
+  --fgD:  #cecece;
+  --fgC:  #e0e0e0;
+  --fgB:  #eeeeee;
+  --fgA:  #ffffff;
+  
+  --accent: #ffff00;
+}
+body[data-theme="light"] {
+  --fgA:  #1e1e1e;
+  --fgB:  #2b2b2b;
+  --fgC:  #3a3a3a;
+  --fgD:  #444444;
+  --fgE:  #555555;
+  --bgE:  #bebebe;
+  --bgD:  #cecece;
+  --bgC:  #e0e0e0;
+  --bgB:  #eeeeee;
+  --bgA:  #ffffff;
+  
+  --accent: #0000ff;
+}
+
+body {
+  font-family: monospace, sans-serif;
+  text-align: center;
+  background-color: var(--bgA);
+  color: var(--fgC);
+  margin: 0;
+  padding: 14px;
+}
+textarea, input[type="text"], input[type="password"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+  /* height: 100px; */
+  height: auto;
+  overflow-y: auto;
+  resize: none;
+  background-color: var(--bgB);
+  color: var(--fgA);
+  border: 1px solid var(--bgD);
+  border-radius: 4px;
+}
+textarea#shaOutput,
+textarea#decryptedText {
+  font-size: 14px;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+button {
+  padding: 8px 16px;
+  font-family: monospace, sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: var(--bgC);
+  color: var(--fgA);
+  border: 1px solid var(--bgE);
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+	margin-top: 10px;
+}
+button:hover {
+  background-color: var(--bgE);
+}
+.count-badge {
+  font-weight: bold;
+  color: var(--accent);
+}
+h2, h3, h4 {
+  font-weight: normal;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+/* Reduce top margin for first heading */
+h2:first-of-type {
+  margin-top: 2px;
+}
+</style>
+
+</head>
+<body>
+<h2>SHA-256 + AES-256-GCM</h2>
+
+<button id="theme-toggle">Light / Dark</button>
+<label for="textInput"><h4>Enter text:</h4></label>
+<textarea id="textInput" placeholder="Type text here..."></textarea><br>
+<button onclick="copyToClipboard('textInput')">Copy Plaintext: <span class="count-badge">0</span></button>
+
+<h4>SHA-256 of Input:</h4>
+<textarea id="shaOutput" readonly placeholder="SHA-256 will appear here..."></textarea><br>
+<button onclick="copyToClipboard('shaOutput')">Copy SHA-256: <span class="count-badge">0</span></button>
+<br>
+
+<label for="password"><h4>Enter password:</h4></label>
+<div class="password-wrap">
+    <input type="password" id="password" placeholder="Password"><br>
+	<button type="button" id="togglePwd" class="password-toggle" aria-label="Show password" title="Show/Hide">
+		Show Password
+	</button>
+</div>
+
+<h4>Encrypted Output:</h4>
+<label for="parameters"><h4>PBKDF2-HMAC-SHA256 100k, AES-256-GCM<br>
+[16B salt, 12B IV, ciphertext, 12B tag] Base64 output:</h4></label>
+<textarea id="output" placeholder="Encrypted text appears here..."></textarea><br>
+<button onclick="copyToClipboard('output')">Copy Encrypted Text: <span class="count-badge">0</span></button>
+
+<h4>Decrypted Text:</h4>
+<textarea id="decryptedText" readonly placeholder="Decrypted text appears here..."></textarea><br>
+<button onclick="copyToClipboard('decryptedText')">Copy Decrypted Text: <span class="count-badge">0</span></button>
+
+<script>const textInput = document.getElementById("textInput");
+const passwordInput = document.getElementById("password");
+const outputBox = document.getElementById("output");
+const decryptedBox = document.getElementById("decryptedText");
+const shaBox = document.getElementById("shaOutput");
+
+// --- Modern clipboard helper with fallback ---
+async function copyToClipboard(elementId) {
+    const el = document.getElementById(elementId);
+    const text = el.value ?? '';
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+        } else {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+        }
+    } catch {
+        console.warn("Clipboard write failed");
+    }
+}
+
+// Attach counters to any button that is immediately followed by a .count-badge
+document.querySelectorAll('button .count-badge').forEach(span => {
+  const btn = span.closest('button');
+  if (!btn || btn.id === 'togglePwd') return;
+  btn.addEventListener('click', () => {
+    span.textContent = String((parseInt(span.textContent, 10) || 0) + 1);
+  });
+});
+
+// --- SHA-256 calculation ---
+async function sha256(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// --- Peek password toggle ---
+function togglePassword() {
+    const pwd = document.getElementById("password");
+    const btn = document.getElementById("togglePwd");
+    const showing = pwd.type === "text";
+    pwd.type = showing ? "password" : "text";
+    btn.textContent = showing ? "Show Password" : "Hide Password";  // <-- added
+    btn.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+}
+document.getElementById('togglePwd').addEventListener('click', togglePassword);
+
+// --- Safer Base64 helpers ---
+function u8ToBase64(u8) {
+    let bin = '';
+    for (let i = 0; i < u8.length; i++) bin += String.fromCharCode(u8[i]);
+    return btoa(bin);
+}
+function base64ToU8(b64) {
+    const bin = atob(b64);
+    const u8 = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    return u8;
+}
+
+// AES-256-GCM Encryption
+async function encryptText(text, password) {
+    if (!text || !password) return "";
+    const enc = new TextEncoder();
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+
+    const keyMaterial = await crypto.subtle.importKey(
+        "raw", enc.encode(password), {name: "PBKDF2"}, false, ["deriveKey"]
+    );
+
+    const key = await crypto.subtle.deriveKey(
+        { name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" },
+        keyMaterial,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["encrypt"]
+    );
+
+    const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(text));
+    const combined = new Uint8Array(salt.byteLength + iv.byteLength + ciphertext.byteLength);
+    combined.set(salt, 0);
+    combined.set(iv, salt.byteLength);
+    combined.set(new Uint8Array(ciphertext), salt.byteLength + iv.byteLength);
+
+    return u8ToBase64(combined);
+}
+
+// AES-256-GCM Decryption
+async function decryptText(base64, password) {
+    if (!base64 || !password) return "";
+    const enc = new TextEncoder();
+    const dec = new TextDecoder();
+    try {
+        const combined = base64ToU8(base64);
+        const salt = combined.slice(0, 16);
+        const iv = combined.slice(16, 28);
+        const ciphertext = combined.slice(28);
+
+        const keyMaterial = await crypto.subtle.importKey(
+            "raw", enc.encode(password), {name: "PBKDF2"}, false, ["deriveKey"]
+        );
+
+        const key = await crypto.subtle.deriveKey(
+            { name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" },
+            keyMaterial,
+            { name: "AES-GCM", length: 256 },
+            false,
+            ["decrypt"]
+        );
+
+        const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ciphertext);
+        return dec.decode(decrypted);
+    } catch (e) {
+        return "Decryption failed (wrong password or corrupted data)";
+    }
+}
+
+// Reactive updates
+let updateTimeout;
+
+// Update SHA, encrypt, and decrypt from input text
+async function updateFromInput() {
+    clearTimeout(updateTimeout);
+    updateTimeout = setTimeout(async () => {
+        shaBox.value = await sha256(textInput.value);
+
+        const encrypted = await encryptText(textInput.value, passwordInput.value);
+        outputBox.value = encrypted;
+
+        decryptedBox.value = await decryptText(encrypted, passwordInput.value);
+    }, 150);
+}
+
+// Update decrypted from encrypted text
+async function updateFromEncrypted() {
+    clearTimeout(updateTimeout);
+    updateTimeout = setTimeout(async () => {
+        decryptedBox.value = await decryptText(outputBox.value, passwordInput.value);
+    }, 150);
+}
+
+// Event listeners
+textInput.addEventListener("input", updateFromInput);
+passwordInput.addEventListener("input", async () => {
+    await updateFromInput();
+});
+outputBox.addEventListener("input", updateFromEncrypted);
+
+// Clear all boxes on reload
+window.addEventListener("load", () => {
+    document.querySelectorAll("input[type='text'], input[type='password'], textarea")
+        .forEach(el => el.value = "");
+});
+
+const themeToggle = document.getElementById('theme-toggle');
+themeToggle.addEventListener('click', () => {
+  if (document.body.hasAttribute('data-theme')) {
+    document.body.removeAttribute('data-theme');
+  } else {
+    document.body.setAttribute('data-theme', 'light');
+  }
+}
+);
+
+</script>
+
+</body>
+</html>
